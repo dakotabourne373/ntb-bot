@@ -3,7 +3,15 @@ import { Options, Partials } from 'discord.js';
 import { createRequire } from 'node:module';
 
 import { Button } from './buttons/index.js';
-import { HelpCommand, InfoCommand, TestCommand } from './commands/chat/index.js';
+import {
+    HelpCommand,
+    InfoCommand,
+    JoinCommand,
+    LeaveCommand,
+    PlayCommand,
+    SkipCommand,
+    TestCommand,
+} from './commands/chat/index.js';
 import {
     ChatCommandMetadata,
     Command,
@@ -40,6 +48,7 @@ let Logs = require('../lang/logs.json');
 async function start(): Promise<void> {
     // Services
     let eventDataService = new EventDataService();
+    // let voiceService = new VoiceUtils();
 
     // Client
     let client = new CustomClient({
@@ -67,6 +76,11 @@ async function start(): Promise<void> {
         new ViewDateJoined(),
 
         // TODO: Add new commands here
+        // Voice Commands
+        new PlayCommand(),
+        new JoinCommand(),
+        new LeaveCommand(),
+        new SkipCommand(),
     ];
 
     // Buttons

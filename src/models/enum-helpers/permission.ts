@@ -215,5 +215,9 @@ export class Permission {
                 return Lang.getRef('permissions.ViewGuildInsights', langCode);
             },
         },
+        ManageGuildExpressions: undefined,
+        ViewCreatorMonetizationAnalytics: undefined,
+        UseSoundboard: undefined,
+        UseExternalSounds: undefined,
     };
 }

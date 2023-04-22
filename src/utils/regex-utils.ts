@@ -1,3 +1,5 @@
+import ytdl from 'ytdl-core';
+
 export class RegexUtils {
     public static regex(input: string): RegExp {
         let match = input.match(/^\/(.*)\/([^/]*)$/);
@@ -27,5 +29,9 @@ export class RegexUtils {
             username: match[1],
             discriminator: match[2],
         };
+    }
+
+    public static youtubeLink(input: string): boolean {
+        return ytdl.validateURL(input);
     }
 }

@@ -51,6 +51,39 @@
                     }
                 ]
             },
+            "botNotConnected": {
+                "description": "bot is not connected to a VC"
+            },
+            "notConnected": {
+                "description": "{{user}} is not connected to voice."
+            },
+            "joinVC": {
+                "description": "Connected to {{channel}}"
+            },
+            "differentVC": {
+                "description": "{{user}} is connected to a different channel, please use /voice join :)"
+            },
+            "leavingVC": {
+                "description": "bot is leaving {{channel}}"
+            },
+            "invalidLink": {
+                "description": "That is not a valid Youtube link"
+            },
+            "queuedVideo": {
+                "description": "Successfully queued video!"
+            },
+            "unknown": {
+                "description": "Don't really know how to react haha"
+            },
+            "playingVideo": {
+                "description": "Queue is empty, playing video :)"
+            },
+            "skippingVideo": {
+                "description": "skipping the current video in the queue"
+            },
+            "emptyQueue": {
+                "description": "The queue is currently empty, nothing to skip."
+            },
             "test": {
                 "description": "Test command works!"
             },
@@ -190,7 +223,11 @@
         "chatCommands": {
             "help": "help",
             "info": "info",
-            "test": "test"
+            "test": "test",
+            "play": "play",
+            "join": "join",
+            "leave": "leave",
+            "skip": "skip"
         },
         "userCommands": {
             "viewDateJoined": "View Date Joined"
@@ -204,11 +241,16 @@
         "commandDescs": {
             "help": "Find help or contact support.",
             "info": "View bot info.",
-            "test": "Run the test command."
+            "test": "Run the test command.",
+            "play": "Play given audio",
+            "join": "force bot to join/move VCs",
+            "leave": "force bot to leave VC",
+            "skip": "skips the currently playing song"
         },
         "argDescs": {
             "helpOption": "Option.",
-            "infoOption": "Option."
+            "infoOption": "Option.",
+            "voiceOption": "Voice Audio controls"
         },
         "fields": {
             "commands": "Commands",
@@ -269,6 +311,14 @@
             "about": "About",
             "translate": "Translate",
             "dev": "Dev"
+        },
+        "voiceOptions": {
+            "join": "join",
+            "play": "url"
+        },
+        "voiceOptionDescs": {
+            "join": "force bot to join/move VCs",
+            "play": "tell bot to play something"
         },
         "yesNo": {
             "yes": "Yes",

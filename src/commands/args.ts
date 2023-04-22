@@ -48,4 +48,12 @@ export class Args {
             },
         ],
     };
+    public static readonly VOICE_OPTION_PLAY: APIApplicationCommandBasicOption = {
+        name: Lang.getRef('voiceOptions.play', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('voiceOptions.play'),
+        description: Lang.getRef('argDescs.voiceOption', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('argDescs.voiceOption'),
+        type: ApplicationCommandOptionType.String,
+        required: true,
+    };
 }

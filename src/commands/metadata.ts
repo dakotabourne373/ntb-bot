@@ -50,6 +50,47 @@ export const ChatCommandMetadata: {
         dm_permission: true,
         default_member_permissions: undefined,
     },
+    PLAY: {
+        type: ApplicationCommandType.ChatInput,
+        name: Lang.getRef('chatCommands.play', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('chatCommands.play'),
+        description: Lang.getRef('commandDescs.play', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commandDescs.play'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+        options: [
+            {
+                ...Args.VOICE_OPTION_PLAY,
+            },
+        ],
+    },
+    JOIN: {
+        type: ApplicationCommandType.ChatInput,
+        name: Lang.getRef('chatCommands.join', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('chatCommands.join'),
+        description: Lang.getRef('commandDescs.join', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commandDescs.join'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+    },
+    LEAVE: {
+        type: ApplicationCommandType.ChatInput,
+        name: Lang.getRef('chatCommands.leave', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('chatCommands.leave'),
+        description: Lang.getRef('commandDescs.leave', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commandDescs.leave'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+    },
+    SKIP: {
+        type: ApplicationCommandType.ChatInput,
+        name: Lang.getRef('chatCommands.skip', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('chatCommands.skip'),
+        description: Lang.getRef('commandDescs.skip', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commandDescs.skip'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+    },
 };
 
 export const MessageCommandMetadata: {

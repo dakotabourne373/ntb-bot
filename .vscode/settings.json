@@ -38,7 +38,8 @@
         "respawned",
         "restjson",
         "unescapes",
-        "varchar"
+        "varchar",
+        "ytdl"
     ],
     "typescript.preferences.importModuleSpecifierEnding": "js"
 }
