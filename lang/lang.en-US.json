@@ -228,7 +228,8 @@
             "play": "play",
             "join": "join",
             "leave": "leave",
-            "skip": "skip"
+            "skip": "skip",
+            "queue": "queue"
         },
         "userCommands": {
             "viewDateJoined": "View Date Joined"
@@ -246,12 +247,15 @@
             "play": "Play given audio",
             "join": "force bot to join/move VCs",
             "leave": "force bot to leave VC",
-            "skip": "skips the currently playing song"
+            "skip": "skips the currently playing song",
+            "queue": "Queue Commands"
         },
         "argDescs": {
             "helpOption": "Option.",
             "infoOption": "Option.",
-            "voiceOption": "Voice Audio controls"
+            "voiceOption": "Voice Audio controls",
+            "showQueueOption": "Show the current queue",
+            "clearQueueOption": "Clear the current queue"
         },
         "fields": {
             "commands": "Commands",
@@ -315,7 +319,9 @@
         },
         "voiceOptions": {
             "join": "join",
-            "play": "url"
+            "play": "url",
+            "show": "show",
+            "clear": "clear"
         },
         "voiceOptionDescs": {
             "join": "force bot to join/move VCs",

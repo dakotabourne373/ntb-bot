@@ -1,4 +1,8 @@
-import { APIApplicationCommandBasicOption, ApplicationCommandOptionType } from 'discord.js';
+import {
+    APIApplicationCommandBasicOption,
+    APIApplicationCommandOption,
+    ApplicationCommandOptionType,
+} from 'discord.js';
 
 import { HelpOption, InfoOption } from '../enums/index.js';
 import { Language } from '../models/enum-helpers/index.js';
@@ -55,5 +59,12 @@ export class Args {
         description_localizations: Lang.getRefLocalizationMap('argDescs.voiceOption'),
         type: ApplicationCommandOptionType.String,
         required: true,
+    };
+    public static readonly QUEUE_OPTION_SHOW: APIApplicationCommandOption = {
+        name: Lang.getRef('voiceOptions.show', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('voiceOptions.show'),
+        description: Lang.getRef('argDescs.showQueueOption', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('argDescs.showQueueOption'),
+        type: ApplicationCommandOptionType.Subcommand,
     };
 }

@@ -9,6 +9,7 @@ import {
     JoinCommand,
     LeaveCommand,
     PlayCommand,
+    QueueCommand,
     SkipCommand,
     TestCommand,
 } from './commands/chat/index.js';
@@ -81,6 +82,7 @@ async function start(): Promise<void> {
         new JoinCommand(),
         new LeaveCommand(),
         new SkipCommand(),
+        new QueueCommand(),
     ];
 
     // Buttons

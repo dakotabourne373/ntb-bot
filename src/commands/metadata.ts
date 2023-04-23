@@ -91,6 +91,16 @@ export const ChatCommandMetadata: {
         dm_permission: true,
         default_member_permissions: undefined,
     },
+    QUEUE: {
+        type: ApplicationCommandType.ChatInput,
+        name: Lang.getRef('chatCommands.queue', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('chatCommands.queue'),
+        description: Lang.getRef('commandDescs.skip', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commandDescs.skip'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+        options: [{ ...Args.QUEUE_OPTION_SHOW }],
+    },
 };
 
 export const MessageCommandMetadata: {
