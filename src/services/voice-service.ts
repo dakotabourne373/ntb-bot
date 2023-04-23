@@ -9,7 +9,8 @@ import {
     JoinVoiceChannelOptions,
     VoiceConnection,
 } from '@discordjs/voice';
-import { videoInfo } from 'ytdl-core';
+import { APIEmbedField } from 'discord.js';
+import ytdl from 'ytdl-core';
 
 import { Logger } from './logger.js';
 import { getYoutubeAudio, getYoutubeInfo } from '../utils/audio-utils.js';
@@ -24,7 +25,7 @@ export enum PlayResponses {
 }
 export class VoiceService {
     public playerMap = new Map<string, AudioPlayer>();
-    private queueMap: { [key: string]: videoInfo[] } = {};
+    private queueMap: { [key: string]: ytdl.videoInfo[] } = {};
 
     public static async joinVoice(
         options: JoinVoiceChannelOptions & CreateVoiceConnectionOptions
@@ -38,6 +39,19 @@ export class VoiceService {
         this.queueMap[guildId] = [];
         const conn = getVoiceConnection(guildId);
         if (conn) conn.destroy();
+    }
+
+    public async generateFieldsFromQueue(
+        guildId: string,
+        totalFields: number
+    ): Promise<APIEmbedField[]> {
+        let fields: APIEmbedField[] =
+            this.queueMap[guildId]?.map((info, index) => ({
+                name: `${index + 1}`,
+                value: info.videoDetails.title,
+            })) || [];
+        fields.splice(totalFields);
+        return fields;
     }
 
     public createPlayer(guildId: string): AudioPlayer {

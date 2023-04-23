@@ -70,7 +70,8 @@
                 "description": "That is not a valid Youtube link"
             },
             "queuedVideo": {
-                "description": "Successfully queued video!"
+                "title": "Video Has been queued!",
+                "description": "Here is the current queue:"
             },
             "unknown": {
                 "description": "Don't really know how to react haha"

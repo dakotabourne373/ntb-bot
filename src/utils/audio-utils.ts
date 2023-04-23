@@ -1,10 +1,11 @@
 import internal from 'node:stream';
-import { downloadFromInfo, getBasicInfo, videoInfo } from 'ytdl-core';
+import ytdl from 'ytdl-core';
 
-export const getYoutubeAudio = (info: videoInfo): internal.Readable =>
-    downloadFromInfo(info, {
+export const getYoutubeAudio = (info: ytdl.videoInfo): internal.Readable =>
+    ytdl.downloadFromInfo(info, {
         quality: 'highestaudio',
         filter: 'audioonly',
     });
 
-export const getYoutubeInfo = async (url: string): Promise<videoInfo> => await getBasicInfo(url);
+export const getYoutubeInfo = async (url: string): Promise<ytdl.videoInfo> =>
+    await ytdl.getInfo(url);

@@ -69,6 +69,7 @@ export class PlayCommand implements Command {
             }
             case PlayResponses.SUCCESSFUL_QUEUE: {
                 embed = Lang.getEmbed('displayEmbeds.queuedVideo', data.lang);
+                embed.addFields(await voiceServiceInstance.generateFieldsFromQueue(guildId, 5));
                 break;
             }
             case PlayResponses.SUCCESSFUL_PLAY: {
