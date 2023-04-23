@@ -19,13 +19,19 @@ export class LeaveCommand implements Command {
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
         const { guildId, guild } = intr;
-        const channel = (await guild.members.fetch(Config.client.id)).voice.channel.name;
+        const { channelId: botChannelId, channel } = (await guild.members.fetch(Config.client.id))
+            .voice;
+
+        if (!botChannelId) {
+            InteractionUtils.send(intr, Lang.getEmbed('displayEmbeds.botNotConnected', data.lang));
+            return;
+        }
 
         voiceServiceInstance.leaveVoice(guildId);
         InteractionUtils.send(
             intr,
             Lang.getEmbed('displayEmbeds.joinVC', data.lang, {
-                channel,
+                channel: channel.name,
             })
         );
     }

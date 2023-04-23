@@ -67,4 +67,11 @@ export class Args {
         description_localizations: Lang.getRefLocalizationMap('argDescs.showQueueOption'),
         type: ApplicationCommandOptionType.Subcommand,
     };
+    public static readonly QUEUE_OPTION_CLEAR: APIApplicationCommandOption = {
+        name: Lang.getRef('voiceOptions.clear', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('voiceOptions.clear'),
+        description: Lang.getRef('argDescs.clearQueueOption', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('argDescs.clearQueueOption'),
+        type: ApplicationCommandOptionType.Subcommand,
+    };
 }

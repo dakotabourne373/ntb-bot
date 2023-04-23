@@ -99,7 +99,7 @@ export const ChatCommandMetadata: {
         description_localizations: Lang.getRefLocalizationMap('commandDescs.skip'),
         dm_permission: true,
         default_member_permissions: undefined,
-        options: [{ ...Args.QUEUE_OPTION_SHOW }],
+        options: [{ ...Args.QUEUE_OPTION_SHOW }, { ...Args.QUEUE_OPTION_CLEAR }],
     },
 };
 

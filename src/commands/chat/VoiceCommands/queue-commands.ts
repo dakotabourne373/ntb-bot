@@ -23,14 +23,14 @@ enum QueueCommands {
 
 export class QueueCommand implements Command {
     public names = [Lang.getRef('chatCommands.queue', Language.Default)];
-    public cooldown = new RateLimiter(2, 5000);
+    public cooldown = new RateLimiter(1, 5000);
     public deferType = CommandDeferType.PUBLIC;
     public requireClientPerms: PermissionsString[] = [];
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
         const command = intr.options.getSubcommand() as QueueCommands;
         const { guildId, guild, member } = intr;
-        const { id: botChannelId } = (await guild.members.fetch(Config.client.id)).voice.channel;
+        const { channelId: botChannelId } = (await guild.members.fetch(Config.client.id)).voice;
         const { voice, displayName } = member as GuildMember;
 
         const { channelId } = voice;
@@ -61,6 +61,11 @@ export class QueueCommand implements Command {
             case QueueCommands.SHOW: {
                 embed.setTitle('Current Queue');
                 embed.addFields(await voiceServiceInstance.generateFieldsFromQueue(guildId, 5));
+                break;
+            }
+            case QueueCommands.CLEAR: {
+                voiceServiceInstance.clearQueue(guildId);
+                embed = Lang.getEmbed('displayEmbeds.clearingQueue', data.lang);
             }
         }
 

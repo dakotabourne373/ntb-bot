@@ -51,6 +51,9 @@
                     }
                 ]
             },
+            "clearingQueue": {
+                "description": "Currently clearing the queue! Please wait a couple of seconds before adding a new song."
+            },
             "botNotConnected": {
                 "description": "bot is not connected to a VC"
             },

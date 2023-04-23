@@ -8,10 +8,12 @@ import {
     joinVoiceChannel,
     JoinVoiceChannelOptions,
     VoiceConnection,
+    VoiceConnectionStatus,
 } from '@discordjs/voice';
 import { APIEmbedField } from 'discord.js';
 import ytdl from 'ytdl-core';
 
+import { voiceServiceInstance } from './index.js';
 import { Logger } from './logger.js';
 import { getYoutubeAudio, getYoutubeInfo } from '../utils/audio-utils.js';
 import { RegexUtils } from '../utils/regex-utils.js';
@@ -31,12 +33,15 @@ export class VoiceService {
         options: JoinVoiceChannelOptions & CreateVoiceConnectionOptions
     ): Promise<VoiceConnection> {
         console.log('creating new connection');
-        return joinVoiceChannel(options);
+        let connection = joinVoiceChannel(options);
+        connection = connection.on(VoiceConnectionStatus.Disconnected, () => {
+            voiceServiceInstance.clearQueue(options.guildId);
+        });
+        return connection;
     }
 
     public async leaveVoice(guildId: string): Promise<void> {
-        this.playerMap.has(guildId) || this.playerMap.get(guildId).stop();
-        this.queueMap[guildId] = [];
+        this.clearQueue(guildId);
         const conn = getVoiceConnection(guildId);
         if (conn) conn.destroy();
     }
@@ -55,13 +60,13 @@ export class VoiceService {
     }
 
     public createPlayer(guildId: string): AudioPlayer {
-        const player = createAudioPlayer();
+        let player = createAudioPlayer();
 
-        player.on(AudioPlayerStatus.Idle, () => {
+        player = player.on(AudioPlayerStatus.Idle, () => {
             console.log('idle');
             this.dequeue(player, guildId);
         });
-        player.on('error', error => {
+        player = player.on('error', error => {
             Logger.error('Error during audio playback', error);
         });
 
@@ -82,6 +87,14 @@ export class VoiceService {
         this.queueMap[guildId].shift();
 
         this.playAudio(player, guildId);
+    }
+
+    public async clearQueue(guildId: string): Promise<void> {
+        this.queueMap[guildId] = [];
+        const player = this.playerMap.get(guildId);
+        if (!player) return;
+
+        player.stop();
     }
 
     public async enqueue(guildId: string, url: string): Promise<PlayResponses> {
@@ -106,7 +119,11 @@ export class VoiceService {
         try {
             const conn = getVoiceConnection(guildId);
 
-            const stream = getYoutubeAudio(url);
+            let stream = getYoutubeAudio(url);
+
+            stream = stream.on('end', () => {
+                stream.destroy();
+            });
 
             const resource = createAudioResource(stream);
             conn.subscribe(player);

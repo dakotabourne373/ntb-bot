@@ -24,7 +24,7 @@ export class SkipCommand implements Command {
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
         const { guildId, guild, member } = intr;
-        const { id: botChannelId } = (await guild.members.fetch(Config.client.id)).voice.channel;
+        const { channelId: botChannelId } = (await guild.members.fetch(Config.client.id)).voice;
         const { voice, displayName } = member as GuildMember;
 
         const { channelId } = voice;
@@ -50,7 +50,6 @@ export class SkipCommand implements Command {
             return;
         }
 
-        // voiceServiceInstance.leaveVoice(guildId);
         let embed: EmbedBuilder = voiceServiceInstance.skip(guildId)
             ? Lang.getEmbed('displayEmbeds.skippingVideo', data.lang)
             : Lang.getEmbed('displayEmbeds.emptyQueue', data.lang);
