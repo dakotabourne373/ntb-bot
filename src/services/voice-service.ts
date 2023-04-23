@@ -46,6 +46,13 @@ export class VoiceService {
         if (conn) conn.destroy();
     }
 
+    public async pause(guildId: string): Promise<boolean> {
+        const player = this.playerMap.get(guildId);
+        if (!player) return false;
+
+        return player.pause();
+    }
+
     public async generateFieldsFromQueue(
         guildId: string,
         totalFields: number

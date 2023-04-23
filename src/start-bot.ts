@@ -8,6 +8,7 @@ import {
     InfoCommand,
     JoinCommand,
     LeaveCommand,
+    PauseCommand,
     PlayCommand,
     QueueCommand,
     SkipCommand,
@@ -83,6 +84,7 @@ async function start(): Promise<void> {
         new LeaveCommand(),
         new SkipCommand(),
         new QueueCommand(),
+        new PauseCommand(),
     ];
 
     // Buttons

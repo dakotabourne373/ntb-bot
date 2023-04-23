@@ -51,6 +51,13 @@
                     }
                 ]
             },
+            "paused": {
+                "description": "current song has been paused"
+            },
+            "pauseFailure": {
+                "description": "Either something went wrong, or there is no song to pause :)",
+                "color": "{{COM:colors.warning}}"
+            },
             "missingPermToJoinVC": {
                 "description": "bot does not have perms to join {{channel}}",
                 "color": "{{COM:colors.warning}}"
@@ -62,7 +69,7 @@
                 "description": "bot is not connected to a VC",
                 "color": "{{COM:colors.warning}}"
             },
-            "notConnected": {
+            "userNotConnected": {
                 "description": "{{user}} is not connected to voice.",
                 "color": "{{COM:colors.warning}}"
             },
@@ -70,7 +77,7 @@
                 "description": "Connected to {{channel}}"
             },
             "differentVC": {
-                "description": "{{user}} is connected to a different channel, please use /voice join :)",
+                "description": "{{user}} is connected to a different channel, please use /join :)",
                 "color": "{{COM:colors.warning}}"
             },
             "leavingVC": {
@@ -241,7 +248,8 @@
             "join": "join",
             "leave": "leave",
             "skip": "skip",
-            "queue": "queue"
+            "queue": "queue",
+            "pause": "pause"
         },
         "userCommands": {
             "viewDateJoined": "View Date Joined"
@@ -260,7 +268,8 @@
             "join": "force bot to join/move VCs",
             "leave": "force bot to leave VC",
             "skip": "skips the currently playing song",
-            "queue": "Queue Commands"
+            "queue": "Queue Commands",
+            "pause": "Pause the currently playing song"
         },
         "argDescs": {
             "helpOption": "Option.",
@@ -333,7 +342,8 @@
             "join": "join",
             "play": "url",
             "show": "show",
-            "clear": "clear"
+            "clear": "clear",
+            "pause": "pause"
         },
         "voiceOptionDescs": {
             "join": "force bot to join/move VCs",

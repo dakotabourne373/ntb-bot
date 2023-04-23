@@ -28,7 +28,7 @@ export class JoinCommand implements Command {
         if (!channelId) {
             await InteractionUtils.send(
                 intr,
-                Lang.getEmbed('displayEmbeds.notConnected', data.lang, {
+                Lang.getEmbed('displayEmbeds.userNotConnected', data.lang, {
                     user: displayName,
                 })
             );

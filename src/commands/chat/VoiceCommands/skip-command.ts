@@ -37,7 +37,7 @@ export class SkipCommand implements Command {
         if (!channelId) {
             InteractionUtils.send(
                 intr,
-                Lang.getEmbed('displayEmbeds.notConnected', data.lang, { user: displayName })
+                Lang.getEmbed('displayEmbeds.userNotConnected', data.lang, { user: displayName })
             );
             return;
         }

@@ -101,6 +101,15 @@ export const ChatCommandMetadata: {
         default_member_permissions: undefined,
         options: [{ ...Args.QUEUE_OPTION_SHOW }, { ...Args.QUEUE_OPTION_CLEAR }],
     },
+    PAUSE: {
+        type: ApplicationCommandType.ChatInput,
+        name: Lang.getRef('chatCommands.pause', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('chatCommands.pause'),
+        description: Lang.getRef('commandDescs.pause', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commandDescs.pause'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+    },
 };
 
 export const MessageCommandMetadata: {
