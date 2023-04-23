@@ -95,6 +95,8 @@ export class VoiceService {
         if (!player) return;
 
         player.stop();
+        player.removeAllListeners();
+        this.playerMap.delete(guildId);
     }
 
     public async enqueue(guildId: string, url: string): Promise<PlayResponses> {
