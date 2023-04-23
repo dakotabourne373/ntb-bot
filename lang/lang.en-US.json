@@ -51,33 +51,42 @@
                     }
                 ]
             },
+            "missingPermToJoinVC": {
+                "description": "bot does not have perms to join {{channel}}",
+                "color": "{{COM:colors.warning}}"
+            },
             "clearingQueue": {
                 "description": "Currently clearing the queue! Please wait a couple of seconds before adding a new song."
             },
             "botNotConnected": {
-                "description": "bot is not connected to a VC"
+                "description": "bot is not connected to a VC",
+                "color": "{{COM:colors.warning}}"
             },
             "notConnected": {
-                "description": "{{user}} is not connected to voice."
+                "description": "{{user}} is not connected to voice.",
+                "color": "{{COM:colors.warning}}"
             },
             "joinVC": {
                 "description": "Connected to {{channel}}"
             },
             "differentVC": {
-                "description": "{{user}} is connected to a different channel, please use /voice join :)"
+                "description": "{{user}} is connected to a different channel, please use /voice join :)",
+                "color": "{{COM:colors.warning}}"
             },
             "leavingVC": {
                 "description": "bot is leaving {{channel}}"
             },
             "invalidLink": {
-                "description": "That is not a valid Youtube link"
+                "description": "That is not a valid Youtube link",
+                "color": "{{COM:colors.warning}}"
             },
             "queuedVideo": {
                 "title": "Video Has been queued!",
                 "description": "Here is the current queue:"
             },
             "unknown": {
-                "description": "Don't really know how to react haha"
+                "description": "Don't really know how to react haha",
+                "color": "{{COM:colors.error}}"
             },
             "playingVideo": {
                 "description": "Queue is empty, playing video :)"

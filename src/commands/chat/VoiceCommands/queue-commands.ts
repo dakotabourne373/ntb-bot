@@ -56,11 +56,12 @@ export class QueueCommand implements Command {
             return;
         }
 
-        let embed: EmbedBuilder;
+        let embed: EmbedBuilder = new EmbedBuilder();
         switch (command) {
             case QueueCommands.SHOW: {
-                embed.setTitle('Current Queue');
-                embed.addFields(await voiceServiceInstance.generateFieldsFromQueue(guildId, 5));
+                embed = embed
+                    .setTitle('Current Queue')
+                    .addFields(await voiceServiceInstance.generateFieldsFromQueue(guildId, 5));
                 break;
             }
             case QueueCommands.CLEAR: {

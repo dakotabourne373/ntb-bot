@@ -27,12 +27,12 @@ export class LeaveCommand implements Command {
             return;
         }
 
-        voiceServiceInstance.leaveVoice(guildId);
         InteractionUtils.send(
             intr,
-            Lang.getEmbed('displayEmbeds.joinVC', data.lang, {
+            Lang.getEmbed('displayEmbeds.leavingVC', data.lang, {
                 channel: channel.name,
             })
         );
+        voiceServiceInstance.leaveVoice(guildId);
     }
 }
