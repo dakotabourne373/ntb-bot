@@ -80,6 +80,10 @@
                 "description": "{{user}} is connected to a different channel, please use /join :)",
                 "color": "{{COM:colors.warning}}"
             },
+            "unavailableAudio": {
+                "description": "This youtube link you provided didn't lead to anything, dingus...",
+                "color": "{{COM:colors.error}}"
+            },
             "leavingVC": {
                 "description": "bot is leaving {{channel}}"
             },
@@ -235,7 +239,8 @@
     },
     "refs": {
         "meta": {
-            "translators": "[TranslatorName#1234](https://github.com/)"
+            "translators": "[TranslatorName#1234](https://github.com/)",
+            "timeout": "Get fucked, nerdneck"
         },
         "bot": {
             "description": "{{REF:links.templateEmbed}} helps give developers a starting point for new Discord bots, so that much of the initial setup can be avoided and developers can instead focus on meaningful bot features."
