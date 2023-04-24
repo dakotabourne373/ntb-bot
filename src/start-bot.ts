@@ -11,6 +11,7 @@ import {
     PauseCommand,
     PlayCommand,
     QueueCommand,
+    ResumeCommand,
     SkipCommand,
     TestCommand,
 } from './commands/chat/index.js';
@@ -85,6 +86,7 @@ async function start(): Promise<void> {
         new SkipCommand(),
         new QueueCommand(),
         new PauseCommand(),
+        new ResumeCommand(),
     ];
 
     // Buttons

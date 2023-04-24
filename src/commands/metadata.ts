@@ -110,6 +110,15 @@ export const ChatCommandMetadata: {
         dm_permission: true,
         default_member_permissions: undefined,
     },
+    RESUME: {
+        type: ApplicationCommandType.ChatInput,
+        name: Lang.getRef('chatCommands.resume', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('chatCommands.resume'),
+        description: Lang.getRef('commandDescs.resume', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commandDescs.resume'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+    },
 };
 
 export const MessageCommandMetadata: {

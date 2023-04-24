@@ -81,6 +81,13 @@ export class VoiceService {
         return player.pause();
     }
 
+    public async resume(guildId: string): Promise<boolean> {
+        const player = this.playerMap.get(guildId);
+        if (!player) return false;
+
+        return player.unpause();
+    }
+
     public createPlayer(guildId: string): AudioPlayer {
         let player = createAudioPlayer();
 
@@ -101,7 +108,6 @@ export class VoiceService {
         if (!player) return false;
 
         player.stop();
-        this.dequeue(guildId);
         return true;
     }
 

@@ -51,12 +51,19 @@
                     }
                 ]
             },
+            "resumed": {
+                "description": "Current song in the queue has been resumed"
+            },
+            "resumeFailure": {
+                "description": "Either something went wrong, or there is no song to resume :)",
+                "color": "{{COM:colors.error}}"
+            },
             "paused": {
                 "description": "current song has been paused"
             },
             "pauseFailure": {
                 "description": "Either something went wrong, or there is no song to pause :)",
-                "color": "{{COM:colors.warning}}"
+                "color": "{{COM:colors.error}}"
             },
             "missingPermToJoinVC": {
                 "description": "bot does not have perms to join {{channel}}",
@@ -254,7 +261,8 @@
             "leave": "leave",
             "skip": "skip",
             "queue": "queue",
-            "pause": "pause"
+            "pause": "pause",
+            "resume": "resume"
         },
         "userCommands": {
             "viewDateJoined": "View Date Joined"
@@ -274,7 +282,8 @@
             "leave": "force bot to leave VC",
             "skip": "skips the currently playing song",
             "queue": "Queue Commands",
-            "pause": "Pause the currently playing song"
+            "pause": "Pause the currently playing song",
+            "resume": "Resumes the current song"
         },
         "argDescs": {
             "helpOption": "Option.",
