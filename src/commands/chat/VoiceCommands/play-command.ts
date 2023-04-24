@@ -53,6 +53,7 @@ export class PlayCommand implements Command {
             );
             return;
         }
+
         const joinOptions = { channelId, adapterCreator, guildId };
 
         botChannelId
@@ -74,6 +75,10 @@ export class PlayCommand implements Command {
             }
             case PlayResponses.SUCCESSFUL_PLAY: {
                 embed = Lang.getEmbed('displayEmbeds.playingVideo', data.lang);
+                break;
+            }
+            case PlayResponses.UNAVAILABLE_VIDEO: {
+                embed = Lang.getEmbed('displayEmbeds.unavailableAudio', data.lang);
                 break;
             }
             default: {
