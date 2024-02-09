@@ -21,7 +21,7 @@ export class JoinCommand implements Command {
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
         const { guildId, guild, member } = intr;
         const { voice, displayName } = member as GuildMember;
-
+        console.log('voice', JSON.stringify(member));
         const channelId = voice?.channelId;
         const adapterCreator = guild.voiceAdapterCreator;
 
