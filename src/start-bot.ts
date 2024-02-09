@@ -4,6 +4,7 @@ import { createRequire } from 'node:module';
 
 import { Button } from './buttons/index.js';
 import {
+    DevCommand,
     HelpCommand,
     InfoCommand,
     JoinCommand,
@@ -68,6 +69,7 @@ async function start(): Promise<void> {
     // Commands
     let commands: Command[] = [
         // Chat Commands
+        new DevCommand(),
         new HelpCommand(),
         new InfoCommand(),
         new TestCommand(),
