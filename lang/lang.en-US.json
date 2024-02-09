@@ -294,7 +294,8 @@
             "helpOption": "Option.",
             "infoOption": "Option.",
             "voiceOption": "Voice Audio controls",
-            "showQueueOption": "Show the current queue"
+            "showQueueOption": "Show the current queue",
+            "clearQueueOption": "Clear the current queue"
         },
         "fields": {
             "commands": "Commands",
