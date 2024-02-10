@@ -7,9 +7,10 @@ import {
 import { RateLimiter } from 'discord.js-rate-limiter';
 import { createRequire } from 'node:module';
 
+import { VoiceErrors, VoiceInfo } from '../../../enums/index.js';
 import { Language } from '../../../models/enum-helpers/index.js';
 import { EventData } from '../../../models/internal-models.js';
-import { Lang, voiceServiceInstance } from '../../../services/index.js';
+import { Lang, Logger, voiceServiceInstance } from '../../../services/index.js';
 import { InteractionUtils } from '../../../utils/index.js';
 import { Command, CommandDeferType } from '../../index.js';
 
@@ -26,11 +27,13 @@ export class SkipCommand implements Command {
         const { guildId, guild, member } = intr;
         const { channelId: botChannelId } = (await guild.members.fetch(Config.client.id)).voice;
         const { voice, displayName } = member as GuildMember;
+        const command = intr.commandName;
 
         const { channelId } = voice;
 
         if (!botChannelId) {
             InteractionUtils.send(intr, Lang.getEmbed('displayEmbeds.botNotConnected', data.lang));
+            Logger.error(VoiceErrors.BOT_NOT_CONNECTED, { command });
             return;
         }
 
@@ -39,6 +42,7 @@ export class SkipCommand implements Command {
                 intr,
                 Lang.getEmbed('displayEmbeds.userNotConnected', data.lang, { user: displayName })
             );
+            Logger.error(VoiceErrors.USER_NOT_CONNECTED, { command });
             return;
         }
 
@@ -47,12 +51,19 @@ export class SkipCommand implements Command {
                 intr,
                 Lang.getEmbed('displayEmbeds.differentVC', data.lang, { user: displayName })
             );
+            Logger.error(VoiceErrors.USER_IN_DIFFERENT_CHANNEL, { command });
             return;
         }
 
-        let embed: EmbedBuilder = voiceServiceInstance.skip(guildId)
-            ? Lang.getEmbed('displayEmbeds.skippingVideo', data.lang)
-            : Lang.getEmbed('displayEmbeds.emptyQueue', data.lang);
+        let embed: EmbedBuilder;
+
+        if (voiceServiceInstance.skip(guildId)) {
+            embed = Lang.getEmbed('displayEmbeds.skippingVideo', data.lang);
+            Logger.info(VoiceInfo.SKIPPING);
+        } else {
+            embed = Lang.getEmbed('displayEmbeds.emptyQueue', data.lang);
+            Logger.info(VoiceInfo.EMPTY_QUEUE);
+        }
 
         InteractionUtils.send(intr, embed);
     }
