@@ -7,9 +7,10 @@ import {
 import { RateLimiter } from 'discord.js-rate-limiter';
 import { createRequire } from 'node:module';
 
+import { VoiceErrors, VoiceInfo } from '../../../enums/index.js';
 import { Language } from '../../../models/enum-helpers/index.js';
 import { EventData } from '../../../models/internal-models.js';
-import { Lang, voiceServiceInstance } from '../../../services/index.js';
+import { Lang, Logger, voiceServiceInstance } from '../../../services/index.js';
 import { InteractionUtils } from '../../../utils/index.js';
 import { Command, CommandDeferType } from '../../index.js';
 
@@ -25,9 +26,11 @@ export class ResumeCommand implements Command {
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
         const { guildId, guild, member } = intr;
         const { channelId: botChannelId } = (await guild.members.fetch(Config.client.id)).voice;
+        const command = intr.commandName;
 
         if (!botChannelId) {
             InteractionUtils.send(intr, Lang.getEmbed('displayEmbeds.botNotConnected', data.lang));
+            Logger.error(VoiceErrors.BOT_NOT_CONNECTED, { command });
             return;
         }
 
@@ -38,6 +41,7 @@ export class ResumeCommand implements Command {
                 intr,
                 Lang.getEmbed('displayEmbeds.userNotConnected', data.lang, { user: displayName })
             );
+            Logger.error(VoiceErrors.USER_NOT_CONNECTED, { command });
             return;
         }
 
@@ -46,12 +50,18 @@ export class ResumeCommand implements Command {
                 intr,
                 Lang.getEmbed('displayEmbeds.differentVC', data.lang, { user: displayName })
             );
+            Logger.error(VoiceErrors.USER_IN_DIFFERENT_CHANNEL, { command });
             return;
         }
 
-        let embed: EmbedBuilder = (await voiceServiceInstance.resume(guildId))
-            ? Lang.getEmbed('displayEmbeds.resumed', data.lang)
-            : Lang.getEmbed('displayEmbeds.resumeFailure', data.lang);
+        let embed: EmbedBuilder;
+        if (await voiceServiceInstance.resume(guildId)) {
+            embed = Lang.getEmbed('displayEmbeds.resumed', data.lang);
+            Logger.info(VoiceInfo.SUCCESSFUL_RESUME);
+        } else {
+            embed = Lang.getEmbed('displayEmbeds.resumeFailure', data.lang);
+            Logger.error(VoiceErrors.RESUME_FAILURE);
+        }
         await InteractionUtils.send(intr, embed);
     }
 }
