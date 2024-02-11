@@ -1,6 +1,11 @@
 {
     "data": {
         "displayEmbeds": {
+            "dmCommandUsageError": {
+                "title": "Error running command",
+                "description": "Command was ran outside of a server environment",
+                "color": "{{COM:colors.error}}"
+            },
             "welcome": {
                 "title": "Thank you for using {{COM:bot.name}}!",
                 "description": ["{{REF:bot.description}}"],

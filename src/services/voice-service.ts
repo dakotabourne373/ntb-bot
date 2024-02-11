@@ -58,6 +58,10 @@ export class VoiceService {
         }
     }
 
+    private getQueueIfExists(guildId: string) {
+        return this.queueMap.get(guildId) || [];
+    }
+
     public static async joinVoice(
         options: JoinVoiceChannelOptions & CreateVoiceConnectionOptions
     ): Promise<VoiceConnection> {
@@ -112,31 +116,31 @@ export class VoiceService {
     }
 
     public dequeue(guildId: string): void {
-        if (this.queueMap.get(guildId)[0]) {
-            this.queueMap.get(guildId)[0].stream = this.queueMap
-                .get(guildId)[0]
-                .stream.pause()
-                .destroy();
+        const queue = this.queueMap.get(guildId);
+        if (!queue || !queue[0]) {
+            return;
         }
-        this.queueMap.get(guildId).shift();
+
+        queue[0].stream && queue[0].stream.pause().destroy();
+        queue?.shift();
         this.totalRemoved++;
         this.checkAndRunGc();
 
-        if (this.queueMap.get(guildId).length > 0) this.playAudio(guildId);
+        if (this.getQueueIfExists(guildId).length > 0) this.playAudio(guildId);
         else this.queueMap.delete(guildId);
     }
 
     public async clearQueue(guildId: string): Promise<ClearResponses> {
-        if (!this.queueMap.get(guildId) || this.queueMap.get(guildId).length === 0)
-            return ClearResponses.UNNECESSARY;
+        const queue = this.getQueueIfExists(guildId);
+        if (!queue.length) return ClearResponses.UNNECESSARY;
         try {
             const player = this.playerMap.get(guildId);
             if (player) {
                 player.stop();
                 player.removeAllListeners();
             }
-            this.totalRemoved += this.queueMap.get(guildId).length;
-            this.queueMap.get(guildId)[0].stream.pause().emit('end');
+            this.totalRemoved += queue.length;
+            queue[0].stream && queue[0].stream.pause().emit('end');
 
             this.queueMap.delete(guildId);
             this.playerMap.delete(guildId);
@@ -152,7 +156,8 @@ export class VoiceService {
         const isValid = RegexUtils.youtubeLink(url);
         if (!isValid) return PlayResponses.NOT_VALID_LINK;
 
-        if (!this.queueMap.get(guildId)) this.queueMap.set(guildId, []);
+        const queue = this.getQueueIfExists(guildId);
+
         const resp = await getYoutubeInfo(url).catch((err: any) => {
             Logger.error('Failed to Grab Video info', err);
             return PlayResponses.UNAVAILABLE_VIDEO;
@@ -160,35 +165,44 @@ export class VoiceService {
         if (resp === PlayResponses.UNAVAILABLE_VIDEO) return resp;
 
         let { videoDetails } = resp as ytdl.videoInfo;
-        this.queueMap.get(guildId).push({ videoInfo: { url, title: videoDetails.title } });
+        queue.push({ videoInfo: { url, title: videoDetails.title } });
 
-        if (this.queueMap.get(guildId).length > 1) return PlayResponses.SUCCESSFUL_QUEUE;
+        if (queue.length > 1) return PlayResponses.SUCCESSFUL_QUEUE;
 
         this.playerMap.get(guildId) ?? this.playerMap.set(guildId, this.createPlayer(guildId));
 
+        this.queueMap.set(guildId, queue);
         this.playAudio(guildId);
         return PlayResponses.SUCCESSFUL_PLAY;
     }
 
     public async playAudio(guildId: string): Promise<void> {
-        const { videoInfo } = this.queueMap.get(guildId)[0];
-        if (!videoInfo) return;
+        const queue = this.getQueueIfExists(guildId);
+        if (!queue.length) return;
+
+        const nextTrack = queue[0];
+        if (!nextTrack.videoInfo) return;
 
         try {
             const conn = getVoiceConnection(guildId);
 
-            let stream = getYoutubeAudio(videoInfo.url);
+            if (!conn) throw new Error('no connection found');
+
+            let stream = getYoutubeAudio(nextTrack.videoInfo.url);
 
             stream = stream.once('end', () => {
                 stream.destroy();
             });
 
-            this.queueMap.get(guildId)[0].stream = stream;
+            queue[0].stream = stream;
+            this.queueMap.set(guildId, queue);
 
             const resource = createAudioResource(stream);
-            const player = this.playerMap.get(guildId);
+            const player = this.playerMap.get(guildId) ?? this.createPlayer(guildId);
+
             conn.subscribe(player);
             player.play(resource);
+            this.playerMap.set(guildId, player);
         } catch (err: any) {
             this.skip(guildId);
             Logger.error('Error during audio setup', err);

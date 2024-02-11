@@ -32,6 +32,13 @@ export class QueueCommand implements Command {
         const command = intr.options.getSubcommand() as QueueCommands;
         const errorParams = { command: intr.commandName };
         const { guildId, guild, member } = intr;
+        if (!guild || !guildId) {
+            InteractionUtils.send(
+                intr,
+                Lang.getEmbed('displayEmbeds.dmCommandUsageError', data.lang)
+            );
+            return;
+        }
         const { channelId: botChannelId } = (await guild.members.fetch(Config.client.id)).voice;
         const { voice, displayName } = member as GuildMember;
 

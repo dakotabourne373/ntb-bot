@@ -25,6 +25,15 @@ export class ResumeCommand implements Command {
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
         const { guildId, guild, member } = intr;
+
+        if (!guild || !guildId) {
+            InteractionUtils.send(
+                intr,
+                Lang.getEmbed('displayEmbeds.dmCommandUsageError', data.lang)
+            );
+            return;
+        }
+
         const { channelId: botChannelId } = (await guild.members.fetch(Config.client.id)).voice;
         const command = intr.commandName;
 

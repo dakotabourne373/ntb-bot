@@ -30,7 +30,10 @@ const IGNORED_ERRORS = [
 ];
 
 export class ClientUtils {
-    public static async getGuild(client: Client, discordId: string): Promise<Guild> {
+    public static async getGuild(
+        client: Client,
+        discordId: string | undefined
+    ): Promise<Guild | undefined> {
         discordId = RegexUtils.discordId(discordId);
         if (!discordId) {
             return;
@@ -51,7 +54,10 @@ export class ClientUtils {
         }
     }
 
-    public static async getChannel(client: Client, discordId: string): Promise<Channel> {
+    public static async getChannel(
+        client: Client,
+        discordId: string | undefined
+    ): Promise<Channel | undefined | null> {
         discordId = RegexUtils.discordId(discordId);
         if (!discordId) {
             return;
@@ -72,7 +78,10 @@ export class ClientUtils {
         }
     }
 
-    public static async getUser(client: Client, discordId: string): Promise<User> {
+    public static async getUser(
+        client: Client,
+        discordId: string | undefined
+    ): Promise<User | undefined> {
         discordId = RegexUtils.discordId(discordId);
         if (!discordId) {
             return;
@@ -93,12 +102,16 @@ export class ClientUtils {
         }
     }
 
-    public static async findAppCommand(client: Client, name: string): Promise<ApplicationCommand> {
+    public static async findAppCommand(
+        client: Client,
+        name: string
+    ): Promise<ApplicationCommand | undefined> {
+        if (!client.application) return;
         let commands = await client.application.commands.fetch();
         return commands.find(command => command.name === name);
     }
 
-    public static async findMember(guild: Guild, input: string): Promise<GuildMember> {
+    public static async findMember(guild: Guild, input: string): Promise<GuildMember | undefined> {
         try {
             let discordId = RegexUtils.discordId(input);
             if (discordId) {
@@ -107,9 +120,10 @@ export class ClientUtils {
 
             let tag = RegexUtils.tag(input);
             if (tag) {
+                const { username, discriminator } = tag;
                 return (
-                    await guild.members.fetch({ query: tag.username, limit: FETCH_MEMBER_LIMIT })
-                ).find(member => member.user.discriminator === tag.discriminator);
+                    await guild.members.fetch({ query: username, limit: FETCH_MEMBER_LIMIT })
+                ).find(member => member.user.discriminator === discriminator);
             }
 
             return (await guild.members.fetch({ query: input, limit: 1 })).first();
@@ -126,7 +140,7 @@ export class ClientUtils {
         }
     }
 
-    public static async findRole(guild: Guild, input: string): Promise<Role> {
+    public static async findRole(guild: Guild, input: string): Promise<Role | undefined | null> {
         try {
             let discordId = RegexUtils.discordId(input);
             if (discordId) {
@@ -155,7 +169,7 @@ export class ClientUtils {
     public static async findTextChannel(
         guild: Guild,
         input: string
-    ): Promise<NewsChannel | TextChannel> {
+    ): Promise<NewsChannel | TextChannel | undefined> {
         try {
             let discordId = RegexUtils.discordId(input);
             if (discordId) {
@@ -191,7 +205,7 @@ export class ClientUtils {
     public static async findVoiceChannel(
         guild: Guild,
         input: string
-    ): Promise<VoiceChannel | StageChannel> {
+    ): Promise<VoiceChannel | StageChannel | undefined> {
         try {
             let discordId = RegexUtils.discordId(input);
             if (discordId) {

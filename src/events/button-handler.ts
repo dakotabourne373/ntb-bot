@@ -80,7 +80,7 @@ export class ButtonHandler implements EventHandler {
         await button.execute(intr, data);
     }
 
-    private findButton(id: string): Button {
+    private findButton(id: string): Button | undefined {
         return this.buttons.find(button => button.ids.includes(id));
     }
 }

@@ -26,9 +26,17 @@ export class PlayCommand implements Command {
     public requireClientPerms: PermissionsString[] = [];
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
-        let url = intr.options.getString('url');
-
         const { guildId, guild, member } = intr;
+
+        if (!guild || !guildId) {
+            InteractionUtils.send(
+                intr,
+                Lang.getEmbed('displayEmbeds.dmCommandUsageError', data.lang)
+            );
+            return;
+        }
+
+        let url = intr.options.getString('url', true);
         const { voice, displayName } = member as GuildMember;
         const command = intr.commandName;
 
@@ -45,7 +53,7 @@ export class PlayCommand implements Command {
             Logger.error(VoiceErrors.USER_NOT_CONNECTED, { ...voice, command });
             return;
         }
-        const botChannelId = (await intr.guild.members.fetch(Config.client.id)).voice.channelId;
+        const botChannelId = (await guild.members.fetch(Config.client.id)).voice.channelId;
         if (botChannelId && botChannelId !== channelId) {
             await InteractionUtils.send(
                 intr,

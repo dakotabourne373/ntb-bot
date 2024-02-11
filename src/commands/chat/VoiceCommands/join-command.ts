@@ -24,10 +24,18 @@ export class JoinCommand implements Command {
         const { voice, displayName } = member as GuildMember;
         const command = intr.commandName;
 
-        const channelId = voice?.channelId;
+        if (!guild || !guildId) {
+            InteractionUtils.send(
+                intr,
+                Lang.getEmbed('displayEmbeds.dmCommandUsageError', data.lang)
+            );
+            return;
+        }
+
+        const { channelId, channel } = voice;
         const adapterCreator = guild.voiceAdapterCreator;
 
-        if (!channelId) {
+        if (!voice || !channel || !channelId) {
             await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('displayEmbeds.userNotConnected', data.lang, {
@@ -39,11 +47,11 @@ export class JoinCommand implements Command {
         }
 
         const bot = await guild.members.fetch(Config.client.id);
-        if (!voice.channel.permissionsFor(bot).has('Connect')) {
+        if (!channel.permissionsFor(bot).has('Connect')) {
             await InteractionUtils.send(
                 intr,
                 Lang.getEmbed('displayEmbeds.missingPermToJoinVC', data.lang, {
-                    channel: voice.channel.name,
+                    channel: channel.name,
                 })
             );
             Logger.error(VoiceErrors.MISSING_CONNECT_PERMS, { command });
@@ -57,7 +65,7 @@ export class JoinCommand implements Command {
         await InteractionUtils.send(
             intr,
             Lang.getEmbed('displayEmbeds.joinVC', data.lang, {
-                channel: voice.channel.name,
+                channel: channel.name,
             })
         );
         Logger.info(VoiceInfo.SUCCESSFUL_JOIN, {

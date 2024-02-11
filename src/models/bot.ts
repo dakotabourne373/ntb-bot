@@ -54,7 +54,7 @@ export class Bot {
 
     private registerListeners(): void {
         this.client.on(Events.ClientReady, () => this.onReady());
-        this.client.on(Events.ShardReady, (shardId: number, unavailableGuilds: Set<string>) =>
+        this.client.on(Events.ShardReady, (shardId: number, unavailableGuilds?: Set<string>) =>
             this.onShardReady(shardId, unavailableGuilds)
         );
         this.client.on(Events.GuildCreate, (guild: Guild) => this.onGuildJoin(guild));
@@ -92,7 +92,7 @@ export class Bot {
         Logger.info(Logs.info.clientReady);
     }
 
-    private onShardReady(shardId: number, _unavailableGuilds: Set<string>): void {
+    private onShardReady(shardId: number, _unavailableGuilds?: Set<string>): void {
         Logger.setShardId(shardId);
     }
 
@@ -120,9 +120,10 @@ export class Bot {
         }
     }
 
-    private async onMessage(msg: Message): Promise<void> {
+    private async onMessage(msg: Message<boolean> | undefined): Promise<void> {
         if (
             !this.ready ||
+            !msg ||
             (Debug.dummyMode.enabled && !Debug.dummyMode.whitelist.includes(msg.author.id))
         ) {
             return;
@@ -164,11 +165,13 @@ export class Bot {
     }
 
     private async onReaction(
-        msgReaction: MessageReaction | PartialMessageReaction,
-        reactor: User | PartialUser
+        msgReaction: MessageReaction | PartialMessageReaction | undefined,
+        reactor: User | PartialUser | undefined
     ): Promise<void> {
         if (
             !this.ready ||
+            !msgReaction ||
+            !reactor ||
             (Debug.dummyMode.enabled && !Debug.dummyMode.whitelist.includes(reactor.id))
         ) {
             return;

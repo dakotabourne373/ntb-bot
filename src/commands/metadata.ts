@@ -75,7 +75,7 @@ export const ChatCommandMetadata: {
         name_localizations: Lang.getRefLocalizationMap('chatCommands.play'),
         description: Lang.getRef('commandDescs.play', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commandDescs.play'),
-        dm_permission: true,
+        dm_permission: false,
         default_member_permissions: undefined,
         options: [
             {
@@ -89,7 +89,7 @@ export const ChatCommandMetadata: {
         name_localizations: Lang.getRefLocalizationMap('chatCommands.join'),
         description: Lang.getRef('commandDescs.join', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commandDescs.join'),
-        dm_permission: true,
+        dm_permission: false,
         default_member_permissions: undefined,
     },
     LEAVE: {
@@ -98,7 +98,7 @@ export const ChatCommandMetadata: {
         name_localizations: Lang.getRefLocalizationMap('chatCommands.leave'),
         description: Lang.getRef('commandDescs.leave', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commandDescs.leave'),
-        dm_permission: true,
+        dm_permission: false,
         default_member_permissions: undefined,
     },
     SKIP: {
@@ -107,7 +107,7 @@ export const ChatCommandMetadata: {
         name_localizations: Lang.getRefLocalizationMap('chatCommands.skip'),
         description: Lang.getRef('commandDescs.skip', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commandDescs.skip'),
-        dm_permission: true,
+        dm_permission: false,
         default_member_permissions: undefined,
     },
     QUEUE: {
@@ -116,7 +116,7 @@ export const ChatCommandMetadata: {
         name_localizations: Lang.getRefLocalizationMap('chatCommands.queue'),
         description: Lang.getRef('commandDescs.skip', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commandDescs.skip'),
-        dm_permission: true,
+        dm_permission: false,
         default_member_permissions: undefined,
         options: [{ ...Args.QUEUE_OPTION_SHOW }, { ...Args.QUEUE_OPTION_CLEAR }],
     },
@@ -126,7 +126,7 @@ export const ChatCommandMetadata: {
         name_localizations: Lang.getRefLocalizationMap('chatCommands.pause'),
         description: Lang.getRef('commandDescs.pause', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commandDescs.pause'),
-        dm_permission: true,
+        dm_permission: false,
         default_member_permissions: undefined,
     },
     RESUME: {
@@ -135,7 +135,7 @@ export const ChatCommandMetadata: {
         name_localizations: Lang.getRefLocalizationMap('chatCommands.resume'),
         description: Lang.getRef('commandDescs.resume', Language.Default),
         description_localizations: Lang.getRefLocalizationMap('commandDescs.resume'),
-        dm_permission: true,
+        dm_permission: false,
         default_member_permissions: undefined,
     },
 };

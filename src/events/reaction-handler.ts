@@ -62,7 +62,7 @@ export class ReactionHandler implements EventHandler {
         await reaction.execute(msgReaction, msg, reactor, data);
     }
 
-    private findReaction(emoji: string): Reaction {
+    private findReaction(emoji: string | null): Reaction | undefined {
         return this.reactions.find(reaction => reaction.emoji === emoji);
     }
 }
