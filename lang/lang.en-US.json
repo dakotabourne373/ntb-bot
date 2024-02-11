@@ -124,6 +124,14 @@
             "viewDateSent": {
                 "description": "This message was sent on {{DATE}}!"
             },
+            "serverStatus": {
+                "title": "Minecraft Server Status - {{url}}"
+            },
+            "serverStatusError": {
+                "title": "Error grabbing server status",
+                "description": "There was some issue fetching the server status",
+                "color": "{{COM:colors.error}}"
+            },
             "about": {
                 "title": "{{COM:bot.name}} - About",
                 "description": "{{REF:bot.description}}",
@@ -264,7 +272,8 @@
             "skip": "skip",
             "queue": "queue",
             "pause": "pause",
-            "resume": "resume"
+            "resume": "resume",
+            "status": "status"
         },
         "userCommands": {
             "viewDateJoined": "View Date Joined"
@@ -287,7 +296,8 @@
             "skip": "skips the currently playing song",
             "queue": "Queue Commands",
             "pause": "Pause the currently playing song",
-            "resume": "Resumes the current song"
+            "resume": "Resumes the current song",
+            "status": "Fetches the current status of any hosted MC server"
         },
         "argDescs": {
             "devCommand": "Command.",

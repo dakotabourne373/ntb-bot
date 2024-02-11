@@ -14,6 +14,7 @@ import {
     QueueCommand,
     ResumeCommand,
     SkipCommand,
+    StatusCommand,
     TestCommand,
 } from './commands/chat/index.js';
 import {
@@ -89,6 +90,9 @@ async function start(): Promise<void> {
         new QueueCommand(),
         new PauseCommand(),
         new ResumeCommand(),
+
+        // Minecraft Commands
+        new StatusCommand(),
     ];
 
     // Buttons

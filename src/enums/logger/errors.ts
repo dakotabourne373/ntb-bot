@@ -12,3 +12,7 @@ export enum PlayErrors {
     VIDEO_NOT_AVAILABLE = 'VIDEO_NOT_AVAILABLE',
     UNKNOWN_ERROR = 'UNKNOWN_ERROR',
 }
+
+export enum MinecraftErrors {
+    ERROR_FETCHING_STATUS = 'ERROR_FETCHING_STATUS',
+}
