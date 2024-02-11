@@ -11,12 +11,21 @@ export class BanWaldenTrigger implements Trigger {
     public triggered(msg: Message): boolean {
         const { member, guildId } = msg;
 
+        if (!member || !guildId) {
+            return false;
+        }
+
         const blockList = this.blockList.get(guildId) || ['873541259774525520'];
         return blockList.includes(member.id);
     }
 
     public async execute(msg: Message, data: EventData): Promise<void> {
         const { member } = msg;
+
+        if (!member) {
+            // TO-DO: Add error log as necessary
+            return;
+        }
 
         Logger.info('Timing user out', { user: member.displayName });
 

@@ -16,9 +16,9 @@ export class ViewDateJoined implements Command {
 
     public async execute(intr: UserContextMenuCommandInteraction, data: EventData): Promise<void> {
         let joinDate: Date;
-        if (!(intr.channel instanceof DMChannel)) {
+        if (!(intr.channel instanceof DMChannel) && intr.guild) {
             let member = await intr.guild.members.fetch(intr.targetUser.id);
-            joinDate = member.joinedAt;
+            joinDate = member.joinedAt || new Date();
         } else joinDate = intr.targetUser.createdAt;
 
         await InteractionUtils.send(

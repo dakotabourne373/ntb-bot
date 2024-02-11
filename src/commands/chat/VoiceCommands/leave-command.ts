@@ -20,11 +20,20 @@ export class LeaveCommand implements Command {
 
     public async execute(intr: ChatInputCommandInteraction, data: EventData): Promise<void> {
         const { guildId, guild } = intr;
+
+        if (!guild || !guildId) {
+            InteractionUtils.send(
+                intr,
+                Lang.getEmbed('displayEmbeds.dmCommandUsageError', data.lang)
+            );
+            return;
+        }
+
         const { channelId: botChannelId, channel } = (await guild.members.fetch(Config.client.id))
             .voice;
         const command = intr.commandName;
 
-        if (!botChannelId) {
+        if (!botChannelId || !channel) {
             InteractionUtils.send(intr, Lang.getEmbed('displayEmbeds.botNotConnected', data.lang));
             Logger.error(VoiceErrors.BOT_NOT_CONNECTED, { command });
             return;

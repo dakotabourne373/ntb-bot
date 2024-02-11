@@ -44,7 +44,7 @@ export class Lang {
         location: string,
         variables?: { [name: string]: string }
     ): LocalizationMap {
-        let obj = {};
+        let obj: { [key: string]: string } = {};
         for (let langCode of Language.Enabled) {
             obj[langCode] = this.getRef(location, langCode, variables);
         }
@@ -64,11 +64,13 @@ export class Lang {
                 url: jsonValue.thumbnail,
             },
             description: Utils.join(jsonValue.description, '\n'),
-            fields: jsonValue.fields?.map(field => ({
-                name: Utils.join(field.name, '\n'),
-                value: Utils.join(field.value, '\n'),
-                inline: field.inline ? field.inline : false,
-            })),
+            fields: jsonValue.fields?.map(
+                (field: { name: string; value: string; inline?: boolean }) => ({
+                    name: Utils.join(field.name, '\n'),
+                    value: Utils.join(field.value, '\n'),
+                    inline: field.inline ? field.inline : false,
+                })
+            ),
             image: {
                 url: jsonValue.image,
             },

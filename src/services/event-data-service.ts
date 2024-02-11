@@ -13,8 +13,8 @@ export class EventDataService {
     public async create(
         options: {
             user?: User;
-            channel?: Channel | PartialDMChannel;
-            guild?: Guild;
+            channel?: Channel | PartialDMChannel | null;
+            guild?: Guild | null;
             args?: Omit<CommandInteractionOptionResolver, 'getMessage' | 'getFocused'>;
         } = {}
     ): Promise<EventData> {

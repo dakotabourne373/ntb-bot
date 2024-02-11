@@ -39,11 +39,11 @@ export class CommandHandler implements EventHandler {
 
         let commandParts =
             intr instanceof ChatInputCommandInteraction || intr instanceof AutocompleteInteraction
-                ? [
+                ? ([
                       intr.commandName,
                       intr.options.getSubcommandGroup(false),
                       intr.options.getSubcommand(false),
-                  ].filter(Boolean)
+                  ].filter(Boolean) as string[])
                 : [intr.commandName];
         let commandName = commandParts.join(' ');
 
