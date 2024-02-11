@@ -310,7 +310,9 @@
             "infoOption": "Option.",
             "voiceOption": "Voice Audio controls",
             "showQueueOption": "Show the current queue",
-            "clearQueueOption": "Clear the current queue"
+            "clearQueueOption": "Clear the current queue",
+            "vanillaStatusOption": "Check the status of the vanilla server",
+            "moddedStatusOption": "Check the status of the modded server"
         },
         "fields": {
             "commands": "Commands",
@@ -385,7 +387,9 @@
             "play": "url",
             "show": "show",
             "clear": "clear",
-            "pause": "pause"
+            "pause": "pause",
+            "vanilla": "vanilla",
+            "modded": "modded"
         },
         "voiceOptionDescs": {
             "join": "force bot to join/move VCs",

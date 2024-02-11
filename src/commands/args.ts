@@ -88,4 +88,18 @@ export class Args {
         description_localizations: Lang.getRefLocalizationMap('argDescs.clearQueueOption'),
         type: ApplicationCommandOptionType.Subcommand,
     };
+    public static readonly STATUS_OPTION_VANILLA: APIApplicationCommandOption = {
+        name: Lang.getRef('voiceOptions.vanilla', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('voiceOptions.vanilla'),
+        description: Lang.getRef('argDescs.vanillaStatusOption', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('argDescs.vanillaStatusOption'),
+        type: ApplicationCommandOptionType.Subcommand,
+    };
+    public static readonly STATUS_OPTION_MODDED: APIApplicationCommandOption = {
+        name: Lang.getRef('voiceOptions.modded', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('voiceOptions.modded'),
+        description: Lang.getRef('argDescs.moddedStatusOption', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('argDescs.moddedStatusOption'),
+        type: ApplicationCommandOptionType.Subcommand,
+    };
 }
