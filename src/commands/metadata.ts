@@ -138,6 +138,15 @@ export const ChatCommandMetadata: {
         dm_permission: true,
         default_member_permissions: undefined,
     },
+    STATUS: {
+        type: ApplicationCommandType.ChatInput,
+        name: Lang.getRef('chatCommands.status', Language.Default),
+        name_localizations: Lang.getRefLocalizationMap('chatCommands.status'),
+        description: Lang.getRef('commandDescs.status', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commandDescs.status'),
+        dm_permission: true,
+        default_member_permissions: undefined,
+    },
 };
 
 export const MessageCommandMetadata: {

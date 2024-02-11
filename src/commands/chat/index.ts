@@ -9,3 +9,4 @@ export { SkipCommand } from './VoiceCommands/skip-command.js';
 export { QueueCommand } from './VoiceCommands/queue-commands.js';
 export { PauseCommand } from './VoiceCommands/pause-command.js';
 export { ResumeCommand } from './VoiceCommands/resume-command.js';
+export { StatusCommand } from './MinecraftComands/status.js';
