@@ -114,8 +114,8 @@ export const ChatCommandMetadata: {
         type: ApplicationCommandType.ChatInput,
         name: Lang.getRef('chatCommands.queue', Language.Default),
         name_localizations: Lang.getRefLocalizationMap('chatCommands.queue'),
-        description: Lang.getRef('commandDescs.skip', Language.Default),
-        description_localizations: Lang.getRefLocalizationMap('commandDescs.skip'),
+        description: Lang.getRef('commandDescs.queue', Language.Default),
+        description_localizations: Lang.getRefLocalizationMap('commandDescs.queue'),
         dm_permission: false,
         default_member_permissions: undefined,
         options: [{ ...Args.QUEUE_OPTION_SHOW }, { ...Args.QUEUE_OPTION_CLEAR }],
@@ -146,6 +146,7 @@ export const ChatCommandMetadata: {
         description_localizations: Lang.getRefLocalizationMap('commandDescs.status'),
         dm_permission: true,
         default_member_permissions: undefined,
+        options: [{ ...Args.STATUS_OPTION_VANILLA }, { ...Args.STATUS_OPTION_MODDED }],
     },
 };
 

@@ -9,11 +9,14 @@ import { Lang } from '../../../services/lang.js';
 import { InteractionUtils } from '../../../utils/interaction-utils.js';
 import { Command, CommandDeferType } from '../../command.js';
 
-const serverUrl = 'ntbgames.us';
+enum StatusCommands {
+    VANILLA = 'vanilla',
+    MODDED = 'modded',
+}
 
 export class StatusCommand implements Command {
     public names = [Lang.getRef('chatCommands.status', Language.Default)];
-    public deferType = CommandDeferType.PUBLIC;
+    public deferType = CommandDeferType.HIDDEN;
     public requireClientPerms: PermissionsString[] = [];
     private httpService: HttpService;
 
@@ -22,6 +25,10 @@ export class StatusCommand implements Command {
     }
 
     public async execute(intr: ChatInputCommandInteraction, eventData: EventData): Promise<void> {
+        const command = intr.options.getSubcommand() as StatusCommands;
+        const port = command === StatusCommands.MODDED ? '' : ':25566';
+        const serverUrl = `ntbgames.us${port}`;
+
         const resp = await this.httpService.get(
             `https://api.mcstatus.io/v2/status/java/${serverUrl}`,
             ''
@@ -46,9 +53,10 @@ export class StatusCommand implements Command {
         }).setImage(`https://api.mcstatus.io/v2/widget/java/${serverUrl}`);
 
         if (online) {
-            const { online, max, list } = players;
+            const { online = 0, max = 0, list = [] } = players || {};
+            const { clean = 'A Minecraft Server' } = motd || {};
             embed
-                .setDescription(motd.clean)
+                .setDescription(clean)
                 .setColor(Colors.Green)
                 .addFields([
                     {
