@@ -122,7 +122,9 @@ export class VoiceService {
         }
 
         queue[0].stream && queue[0].stream.pause().destroy();
-        queue?.shift();
+        queue.shift();
+        this.queueMap.set(guildId, queue);
+
         this.totalRemoved++;
         this.checkAndRunGc();
 
