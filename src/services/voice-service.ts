@@ -218,7 +218,7 @@ export class VoiceService {
         let fields: APIEmbedField[] =
             this.queueMap.get(guildId)?.map(({ videoInfo }, index: number) => ({
                 name: `${index + 1}`,
-                value: videoInfo.title,
+                value: `[${videoInfo.title}](${videoInfo.url})`,
             })) || [];
         fields.splice(totalFields);
         return fields;
