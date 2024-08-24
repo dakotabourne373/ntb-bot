@@ -12,7 +12,7 @@ import {
 } from '@discordjs/voice';
 import { APIEmbedField } from 'discord.js';
 import { Readable } from 'node:stream';
-import ytdl from 'ytdl-core';
+import ytdl from '@distube/ytdl-core';
 
 import { voiceServiceInstance } from './index.js';
 import { Logger } from './logger.js';
