@@ -1,5 +1,5 @@
 import internal from 'node:stream';
-import ytdl from 'ytdl-core';
+import ytdl from '@distube/ytdl-core';
 
 export const getYoutubeAudio = (url: string): internal.Readable =>
     ytdl(url, {

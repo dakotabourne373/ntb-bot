@@ -1,4 +1,4 @@
-import ytdl from 'ytdl-core';
+import ytdl from '@distube/ytdl-core';
 
 export class RegexUtils {
     public static regex(input: string): RegExp | undefined {
