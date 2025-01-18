@@ -177,7 +177,11 @@ export class VoiceService {
         this.playerMap.get(guildId) ?? this.playerMap.set(guildId, this.createPlayer(guildId));
 
         this.queueMap.set(guildId, queue);
-        this.playAudio(guildId);
+        try {
+            this.playAudio(guildId);
+        } catch {
+            return PlayResponses.ERROR_PLAYING;
+        }
         return PlayResponses.SUCCESSFUL_PLAY;
     }
 
