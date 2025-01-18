@@ -10,9 +10,9 @@ import {
     VoiceConnection,
     VoiceConnectionStatus,
 } from '@discordjs/voice';
+import ytdl from '@distube/ytdl-core';
 import { APIEmbedField } from 'discord.js';
 import { Readable } from 'node:stream';
-import ytdl from '@distube/ytdl-core';
 
 import { voiceServiceInstance } from './index.js';
 import { Logger } from './logger.js';
@@ -67,7 +67,10 @@ export class VoiceService {
     ): Promise<VoiceConnection> {
         Logger.info('creating new connection', options);
 
-        return joinVoiceChannel(options).once(VoiceConnectionStatus.Disconnected, () => {
+        // return joinVoiceChannel(options).once(VoiceConnectionStatus.Disconnected, () => {
+        //     voiceServiceInstance.clearQueue(options.guildId);
+        // });
+        return joinVoiceChannel(options).on(VoiceConnectionStatus.Disconnected, () => {
             voiceServiceInstance.clearQueue(options.guildId);
         });
     }
@@ -139,7 +142,7 @@ export class VoiceService {
             const player = this.playerMap.get(guildId);
             if (player) {
                 player.stop();
-                player.removeAllListeners();
+                // player.removeAllListeners();
             }
             this.totalRemoved += queue.length;
             queue[0].stream && queue[0].stream.pause().emit('end');

@@ -1,4 +1,4 @@
-import { getVoiceConnection } from '@discordjs/voice';
+import { DiscordGatewayAdapterCreator, getVoiceConnection } from '@discordjs/voice';
 import { ChatInputCommandInteraction, GuildMember, PermissionsString } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
 import { createRequire } from 'node:module';
@@ -33,7 +33,7 @@ export class JoinCommand implements Command {
         }
 
         const { channelId, channel } = voice;
-        const adapterCreator = guild.voiceAdapterCreator;
+        const adapterCreator = guild.voiceAdapterCreator as DiscordGatewayAdapterCreator;
 
         if (!voice || !channel || !channelId) {
             await InteractionUtils.send(

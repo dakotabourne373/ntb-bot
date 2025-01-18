@@ -1,4 +1,4 @@
-import { getVoiceConnection } from '@discordjs/voice';
+import { DiscordGatewayAdapterCreator, getVoiceConnection } from '@discordjs/voice';
 import {
     ChatInputCommandInteraction,
     EmbedBuilder,
@@ -41,7 +41,7 @@ export class PlayCommand implements Command {
         const command = intr.commandName;
 
         const channelId = voice?.channelId;
-        const adapterCreator = guild.voiceAdapterCreator;
+        const adapterCreator = guild.voiceAdapterCreator as DiscordGatewayAdapterCreator;
 
         if (!channelId) {
             await InteractionUtils.send(
