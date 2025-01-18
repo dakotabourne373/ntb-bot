@@ -6,6 +6,7 @@ import { Logger } from '../services/logger.js';
 
 export const getYoutubeAudio = (url: string): internal.Readable => {
     try {
+        Logger.info('dir path: ', new fs.Dir().path);
         const agent = ytdl.createAgent(JSON.parse(fs.readFileSync('cookies.json', 'utf8')));
         return ytdl(url, {
             quality: 'highestaudio',
