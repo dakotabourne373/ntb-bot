@@ -1,0 +1,1 @@
+cp ~/ntb-bot/cookies.json ~/ntb-bot/dist/utils
