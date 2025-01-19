@@ -36,7 +36,7 @@ function formatValidationErrors(errors: ValidationError[]): ValidationErrorLog[]
         property: error.property,
         constraints: error.constraints,
         children:
-            error.children && error.children.length > 0
+            error.children && error.children?.length > 0
                 ? formatValidationErrors(error.children)
                 : undefined,
     }));

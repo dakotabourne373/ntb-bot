@@ -71,15 +71,13 @@ export class ShardsController implements Controller {
         await this.shardManager.broadcastEval(
             (client, context) => {
                 let customClient = client as CustomClient;
-                return customClient.setPresence(context.type, context.name, context.url);
+                return customClient.setPresence(
+                    context.type as Exclude<ActivityType, ActivityType.Custom>,
+                    context.name,
+                    context.url
+                );
             },
-            {
-                context: {
-                    type: ActivityType[reqBody.type],
-                    name: reqBody.name,
-                    url: reqBody.url,
-                },
-            }
+            { context: { type: ActivityType[reqBody.type], name: reqBody.name, url: reqBody.url } }
         );
 
         res.sendStatus(200);
