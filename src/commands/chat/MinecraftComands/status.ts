@@ -29,66 +29,75 @@ export class StatusCommand implements Command {
         const port = command === StatusCommands.MODDED ? '' : ':25566';
         const serverUrl = `ntbgames.us${port}`;
 
-        const resp = await this.httpService.get(
-            `https://api.mcstatus.io/v2/status/java/${serverUrl}`,
-            ''
-        );
-        if (!resp.ok) {
+        try {
+            const resp = await this.httpService.get(
+                `https://api.mcstatus.io/v2/status/java/${serverUrl}`,
+                ''
+            );
+            if (!resp.ok) {
+                InteractionUtils.send(
+                    intr,
+                    Lang.getEmbed('displayEmbeds.serverStatusError', eventData.lang)
+                );
+                Logger.error(MinecraftErrors.ERROR_FETCHING_STATUS, {
+                    statusCode: resp.status,
+                    error: await resp.text(),
+                });
+            }
+
+            const data = (await resp.json()) as StatusResponse;
+
+            const { motd, online, players } = data;
+
+            const embed = Lang.getEmbed('displayEmbeds.serverStatus', eventData.lang, {
+                url: serverUrl,
+            }).setImage(`https://api.mcstatus.io/v2/widget/java/${serverUrl}`);
+
+            if (online) {
+                const { online = 0, max = 0, list = [] } = players || {};
+                const { clean = 'A Minecraft Server' } = motd || {};
+                embed
+                    .setDescription(clean)
+                    .setColor(Colors.Green)
+                    .addFields([
+                        {
+                            name: 'Status',
+                            value: '🟢 Online',
+                        },
+                        {
+                            name: 'Players Online',
+                            value: online ? list.join('\n') : 'N/A',
+                            inline: true,
+                        },
+                        {
+                            name: 'Total Players Online',
+                            value: online.toString(),
+                            inline: true,
+                        },
+                        {
+                            name: 'Max Players',
+                            value: max.toString(),
+                            inline: true,
+                        },
+                    ]);
+            } else {
+                embed.setColor(Colors.DarkRed).addFields([
+                    {
+                        name: 'Status',
+                        value: '🔴 Offline',
+                    },
+                ]);
+            }
+
+            InteractionUtils.send(intr, embed);
+            Logger.info(STATUS_SUCCESS);
+        } catch {
             InteractionUtils.send(
                 intr,
                 Lang.getEmbed('displayEmbeds.serverStatusError', eventData.lang)
             );
-            Logger.error(MinecraftErrors.ERROR_FETCHING_STATUS, {
-                statusCode: resp.status,
-                error: await resp.text(),
-            });
+            Logger.error(MinecraftErrors.ERROR_FETCHING_STATUS);
+            return;
         }
-
-        const data = (await resp.json()) as StatusResponse;
-
-        const { motd, online, players } = data;
-
-        const embed = Lang.getEmbed('displayEmbeds.serverStatus', eventData.lang, {
-            url: serverUrl,
-        }).setImage(`https://api.mcstatus.io/v2/widget/java/${serverUrl}`);
-
-        if (online) {
-            const { online = 0, max = 0, list = [] } = players || {};
-            const { clean = 'A Minecraft Server' } = motd || {};
-            embed
-                .setDescription(clean)
-                .setColor(Colors.Green)
-                .addFields([
-                    {
-                        name: 'Status',
-                        value: '🟢 Online',
-                    },
-                    {
-                        name: 'Players Online',
-                        value: online ? list.join('\n') : 'N/A',
-                        inline: true,
-                    },
-                    {
-                        name: 'Total Players Online',
-                        value: online.toString(),
-                        inline: true,
-                    },
-                    {
-                        name: 'Max Players',
-                        value: max.toString(),
-                        inline: true,
-                    },
-                ]);
-        } else {
-            embed.setColor(Colors.DarkRed).addFields([
-                {
-                    name: 'Status',
-                    value: '🔴 Offline',
-                },
-            ]);
-        }
-
-        InteractionUtils.send(intr, embed);
-        Logger.info(STATUS_SUCCESS);
     }
 }
