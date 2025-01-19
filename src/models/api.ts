@@ -24,7 +24,7 @@ export class Api {
         let listen: (port: number) => Promise<void> = util.promisify(
             this.app.listen.bind(this.app)
         );
-        await listen(Config.api.port as number);
+        await listen(Config.api.port);
         Logger.info(Logs.info.apiStarted.replaceAll('{PORT}', Config.api.port));
     }
 
