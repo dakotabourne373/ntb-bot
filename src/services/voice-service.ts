@@ -165,11 +165,14 @@ export class VoiceService {
 
         const resp = await getYoutubeInfo(url).catch((err: any) => {
             Logger.error('Failed to Grab Video info', err);
-            return PlayResponses.UNAVAILABLE_VIDEO;
+            return PlayResponses.UNAVAILABLE_VIDEO as const;
         });
         if (resp === PlayResponses.UNAVAILABLE_VIDEO) return resp;
 
-        let { videoDetails } = resp as ytdl.videoInfo;
+        let { videoDetails, formats } = resp;
+
+        if (!formats.length) return PlayResponses.UNAVAILABLE_VIDEO;
+
         queue.push({ videoInfo: { url, title: videoDetails.title } });
 
         if (queue.length > 1) return PlayResponses.SUCCESSFUL_QUEUE;
