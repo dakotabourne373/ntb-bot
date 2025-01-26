@@ -169,9 +169,7 @@ export class VoiceService {
         });
         if (resp === PlayResponses.UNAVAILABLE_VIDEO) return resp;
 
-        let { videoDetails, formats } = resp;
-
-        if (!formats.length) return PlayResponses.UNAVAILABLE_VIDEO;
+        let { videoDetails } = resp;
 
         queue.push({ videoInfo: { url, title: videoDetails.title } });
 
