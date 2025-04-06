@@ -167,9 +167,8 @@ export class VoiceService {
             Logger.error('Failed to Grab Video info', err);
             return PlayResponses.UNAVAILABLE_VIDEO as const;
         });
-        const audioFormats = (resp as ytdl.videoInfo).formats.filter(
-            f => f.hasAudio && !f.hasVideo
-        );
+        const audioFormats =
+            (resp as ytdl.videoInfo).formats?.filter(f => f.hasAudio && !f.hasVideo) || [];
         if (resp === PlayResponses.UNAVAILABLE_VIDEO || audioFormats.length === 0)
             return PlayResponses.UNAVAILABLE_VIDEO;
 
