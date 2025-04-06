@@ -16,7 +16,8 @@ export class BanWaldenTrigger implements Trigger {
         }
 
         const blockList = this.blockList.get(guildId) || ['873541259774525520'];
-        return blockList.includes(member.id);
+//        return blockList.includes(member.id);
+return false;
     }
 
     public async execute(msg: Message, data: EventData): Promise<void> {
