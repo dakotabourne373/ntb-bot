@@ -164,7 +164,7 @@ export class VoiceService {
 
         const overrideUrl = urlType === 'music' && url.match(YOUTUBE_REGEX)?.[2];
         const youtube = `https://www.youtube.com/watch?v=${overrideUrl}`;
-        const finalUrl = youtube || url;
+        const finalUrl = overrideUrl ? youtube : url;
         const resp = await getYoutubeInfo(finalUrl).catch((err: any) => {
             Logger.error('Failed to Grab Video info', { err, url });
             return PlayResponses.UNAVAILABLE_VIDEO as const;
