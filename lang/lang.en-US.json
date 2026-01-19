@@ -111,6 +111,9 @@
                 "description": "Don't really know how to react haha",
                 "color": "{{COM:colors.error}}"
             },
+            "playingVideoWithTitle": {
+                "description": "Queue is empty, playing {{videoEmbed}} :)"
+            },
             "playingVideo": {
                 "description": "Queue is empty, playing video :)"
             },

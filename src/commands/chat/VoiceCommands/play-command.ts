@@ -72,7 +72,7 @@ export class PlayCommand implements Command {
         const joinOptions = { channelId, adapterCreator, guildId };
 
         botChannelId
-            ? getVoiceConnection(guildId) ?? (await VoiceService.joinVoice(joinOptions))
+            ? (getVoiceConnection(guildId) ?? (await VoiceService.joinVoice(joinOptions)))
             : await VoiceService.joinVoice(joinOptions);
 
         const resp = await voiceServiceInstance.enqueue(guildId, url);
@@ -91,7 +91,16 @@ export class PlayCommand implements Command {
                 break;
             }
             case PlayResponses.SUCCESSFUL_PLAY: {
-                embed = Lang.getEmbed('displayEmbeds.playingVideo', data.lang);
+                const nowPlayingSong = await voiceServiceInstance.getNowPlayingSong(guildId);
+                embed = Lang.getEmbed(
+                    nowPlayingSong
+                        ? 'displayEmbeds.playingVideoWithTitle'
+                        : 'displayEmbeds.playingVideo',
+                    data.lang,
+                    {
+                        videoEmbed: nowPlayingSong ?? '',
+                    }
+                );
                 Logger.info(PlaySuccesses.SUCCESSFUL_PLAY);
                 break;
             }

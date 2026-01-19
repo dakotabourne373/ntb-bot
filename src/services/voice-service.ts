@@ -240,4 +240,10 @@ export class VoiceService {
         fields.splice(totalFields);
         return fields;
     }
+
+    public async getNowPlayingSong(guildId: string): Promise<string | null> {
+        const videoInfo = this.queueMap.get(guildId)?.[0].videoInfo;
+        if (!videoInfo) return null;
+        return `[${videoInfo.title}](${videoInfo.url})`;
+    }
 }
