@@ -10,14 +10,13 @@ import {
     VoiceConnection,
     VoiceConnectionStatus,
 } from '@discordjs/voice';
-import ytdl from '@distube/ytdl-core';
 import { APIEmbedField } from 'discord.js';
 import { Readable } from 'node:stream';
 
 import { voiceServiceInstance } from './index.js';
 import { Logger } from './logger.js';
 import { getYoutubeAudio, getYoutubeInfo } from '../utils/audio-utils.js';
-import { RegexUtils } from '../utils/regex-utils.js';
+import { RegexUtils, YOUTUBE_REGEX } from '../utils/regex-utils.js';
 
 export enum PlayResponses {
     SUCCESSFUL_QUEUE,
@@ -158,23 +157,29 @@ export class VoiceService {
     }
 
     public async enqueue(guildId: string, url: string): Promise<PlayResponses> {
-        const isValid = RegexUtils.youtubeLink(url);
-        if (!isValid) return PlayResponses.NOT_VALID_LINK;
+        const urlType = RegexUtils.youtubeLink(url);
+        if (!urlType) return PlayResponses.NOT_VALID_LINK;
 
         const queue = this.getQueueIfExists(guildId);
 
-        const resp = await getYoutubeInfo(url).catch((err: any) => {
-            Logger.error('Failed to Grab Video info', err);
+        const overrideUrl = urlType === 'music' && url.match(YOUTUBE_REGEX)?.[2];
+        const youtube = `https://www.youtube.com/watch?v=${overrideUrl}`;
+        const finalUrl = youtube || url;
+        const resp = await getYoutubeInfo(finalUrl).catch((err: any) => {
+            Logger.error('Failed to Grab Video info', { err, url });
             return PlayResponses.UNAVAILABLE_VIDEO as const;
         });
-        const audioFormats =
-            (resp as ytdl.videoInfo).formats?.filter(f => f.hasAudio && !f.hasVideo) || [];
-        if (resp === PlayResponses.UNAVAILABLE_VIDEO || audioFormats.length === 0)
+        if (resp === PlayResponses.UNAVAILABLE_VIDEO) return PlayResponses.UNAVAILABLE_VIDEO;
+
+        // is video playable?
+        if (!resp?.playability_status) {
+            Logger.error('VIDEO_NOT_AVAILABLE', { url: finalUrl, reason: 'no streaming_data' });
             return PlayResponses.UNAVAILABLE_VIDEO;
+        }
 
-        let { videoDetails } = resp;
+        const title = resp.basic_info?.title || 'Unknown Title';
 
-        queue.push({ videoInfo: { url, title: videoDetails.title } });
+        queue.push({ videoInfo: { url: finalUrl, title } });
 
         if (queue.length > 1) return PlayResponses.SUCCESSFUL_QUEUE;
 
@@ -201,7 +206,8 @@ export class VoiceService {
 
             if (!conn) throw new Error('no connection found');
 
-            let stream = getYoutubeAudio(nextTrack.videoInfo.url);
+            // Now awaiting the Promise
+            let stream = await getYoutubeAudio(nextTrack.videoInfo.url);
 
             stream = stream.once('end', () => {
                 stream.destroy();

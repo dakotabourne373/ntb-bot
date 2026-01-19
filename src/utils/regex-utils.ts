@@ -1,4 +1,9 @@
-import ytdl from '@distube/ytdl-core';
+export const YOUTUBE_REGEX =
+    /^(?:https?:\/\/)?(?:(www|music)\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[&?].*)?$/;
+const YOUTUBE_MUSIC_REGEX =
+    /^(?:https?:\/\/)?(?:music\.)(?:youtube\.com\/(?:watch\?v=|embed\/|v\/))([a-zA-Z0-9_-]{11})(?:[&?].*)?$/;
+const YOUTUBE_ONLY_REGEX =
+    /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[&?].*)?$/;
 
 export class RegexUtils {
     public static regex(input: string): RegExp | undefined {
@@ -33,7 +38,15 @@ export class RegexUtils {
         };
     }
 
-    public static youtubeLink(input: string): boolean {
-        return ytdl.validateURL(input);
+    public static youtubeLink(input: string): 'music' | 'regular' | null {
+        let returnType = null;
+        if (YOUTUBE_MUSIC_REGEX.test(input)) returnType = 'music' as const;
+        else if (YOUTUBE_ONLY_REGEX.test(input)) returnType = 'regular' as const;
+        return returnType;
+    }
+
+    public static extractYoutubeVideoId(input: string): string | null {
+        const match = input.match(YOUTUBE_ONLY_REGEX);
+        return match?.[1] ?? null;
     }
 }
