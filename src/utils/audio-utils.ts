@@ -1,4 +1,4 @@
-import { Innertube, UniversalCache, Platform, SessionOptions } from 'youtubei.js';
+import { Innertube, UniversalCache, Platform, SessionOptions, Types } from 'youtubei.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import internal, { Readable } from 'node:stream';
@@ -8,24 +8,12 @@ import { Logger } from '../services/logger.js';
 import { RegexUtils } from './regex-utils.js';
 
 // Set up the JavaScript evaluator for deciphering URLs
-// This is required for Node.js to run YouTube's obfuscated signature code
-Platform.shim.eval = (data: any, env: Record<string, any>) => {
-    // data.output contains an IIFE that returns an object with sigFunction, nFunction, rawValues
-    // We need to execute it, then call the returned functions with env values
-
-    const exportedVars = new Function(`${data.output}\nreturn exportedVars;`)();
-
-    const result: Record<string, string> = {};
-
-    if (env.n && typeof exportedVars.nFunction === 'function') {
-        result.n = exportedVars.nFunction(env.n);
-    }
-
-    if (env.sig && typeof exportedVars.sigFunction === 'function') {
-        result.sig = exportedVars.sigFunction(env.sig);
-    }
-
-    return result;
+// data.output already includes the return statement injected by youtubei.js
+Platform.shim.eval = async (
+    data: Types.BuildScriptResult,
+    _env: Record<string, Types.VMPrimative>
+) => {
+    return new Function(data.output)();
 };
 
 // Module-level cache
