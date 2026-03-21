@@ -4,6 +4,7 @@ import {
     createAudioPlayer,
     createAudioResource,
     CreateVoiceConnectionOptions,
+    entersState,
     getVoiceConnection,
     joinVoiceChannel,
     JoinVoiceChannelOptions,
@@ -98,8 +99,11 @@ export class VoiceService {
         let player = createAudioPlayer();
 
         player = player.on(AudioPlayerStatus.Idle, () => {
-            console.log('idle');
+            Logger.info('PLAYER_IDLE', { guildId });
             this.dequeue(guildId);
+        });
+        player = player.on(AudioPlayerStatus.Buffering, () => {
+            Logger.warn('PLAYER_BUFFERING', { guildId });
         });
         player = player.on('error', error => {
             Logger.error('Error during audio playback', error);
@@ -187,7 +191,7 @@ export class VoiceService {
 
         this.queueMap.set(guildId, queue);
         try {
-            this.playAudio(guildId);
+            await this.playAudio(guildId);
         } catch {
             return PlayResponses.ERROR_PLAYING;
         }
@@ -205,6 +209,18 @@ export class VoiceService {
             const conn = getVoiceConnection(guildId);
 
             if (!conn) throw new Error('no connection found');
+
+            if (conn.state.status !== VoiceConnectionStatus.Ready) {
+                try {
+                    await entersState(conn, VoiceConnectionStatus.Ready, 10_000);
+                } catch {
+                    Logger.error('VOICE_CONNECTION_TIMEOUT', {
+                        guildId,
+                        connState: conn.state.status,
+                    });
+                    return;
+                }
+            }
 
             // Now awaiting the Promise
             let stream = await getYoutubeAudio(nextTrack.videoInfo.url);

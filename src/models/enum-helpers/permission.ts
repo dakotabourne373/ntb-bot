@@ -10,6 +10,16 @@ export class Permission {
     public static Data: {
         [key in PermissionsString]: PermissionData;
     } = {
+        PinMessages: {
+            displayName(langCode: Locale): string {
+                return Lang.getRef('permissions.PinMessages', langCode);
+            },
+        },
+        BypassSlowmode: {
+            displayName(langCode: Locale): string {
+                return Lang.getRef('permissions.BypassSlowmode', langCode);
+            },
+        },
         AddReactions: {
             displayName(langCode: Locale): string {
                 return Lang.getRef('permissions.AddReactions', langCode);
