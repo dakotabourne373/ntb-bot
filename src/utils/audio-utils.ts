@@ -186,8 +186,18 @@ export const getYoutubeAudio = async (url: string): Promise<internal.Readable> =
         '--no-cache-dir',
         '--no-progress',
         '--quiet',
+        // Fetch in bounded HTTP chunks so a slow downstream consumer (Discord plays
+        // at ~real-time) never leaves a single long-lived connection idle long enough
+        // for YouTube to drop it. Each chunk is a fresh, short-lived range request.
+        '--http-chunk-size',
+        '10M',
+        // Never give up on a transient stall mid-song.
         '--retries',
-        '3',
+        'infinite',
+        '--fragment-retries',
+        'infinite',
+        '--socket-timeout',
+        '30',
         '-o',
         '-', // stream to stdout
     ];
@@ -209,19 +219,24 @@ export const getYoutubeAudio = async (url: string): Promise<internal.Readable> =
 
     const child = spawn(YT_DLP_BINARY, args, { stdio: ['ignore', 'pipe', 'pipe'] });
 
+    // Buffer yt-dlp's output so it can download well ahead of playback instead of
+    // being throttled to the consumer's rate. A generous highWaterMark holds a
+    // typical song in memory, fully decoupling download speed from playback.
+    const output = child.stdout.pipe(new internal.PassThrough({ highWaterMark: 1 << 26 }));
+
     let stderr = '';
     child.stderr.on('data', (d: Buffer) => {
         stderr += d.toString();
     });
     child.on('error', (err: Error) => {
         Logger.error('YTDLP_SPAWN_ERROR', { message: err.message, binary: YT_DLP_BINARY });
-        child.stdout.destroy(err);
+        output.destroy(err);
     });
     child.on('close', (code: number | null) => {
         if (code !== 0 && code !== null) {
             Logger.error('YTDLP_EXIT_NONZERO', { code, videoId, stderr: stderr.slice(-500) });
-            if (!child.stdout.destroyed) {
-                child.stdout.destroy(new Error(`yt-dlp exited ${code}`));
+            if (!output.destroyed) {
+                output.destroy(new Error(`yt-dlp exited ${code}`));
             }
         }
     });
@@ -229,7 +244,7 @@ export const getYoutubeAudio = async (url: string): Promise<internal.Readable> =
     // yt-dlp extraction (page fetch + po_token + format selection) can take several
     // seconds before the first byte, so allow a generous startup window.
     try {
-        await ensureStreamHasData(child.stdout, 25_000);
+        await ensureStreamHasData(output, 25_000);
     } catch (err: any) {
         try {
             child.kill('SIGKILL');
@@ -245,7 +260,7 @@ export const getYoutubeAudio = async (url: string): Promise<internal.Readable> =
     }
 
     Logger.info('AUDIO_FETCH_SUCCESSFUL', { videoId, engine: 'yt-dlp' });
-    return child.stdout;
+    return output;
 };
 
 // Client types to try - prioritize clients that work better for streaming
