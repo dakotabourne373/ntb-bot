@@ -14,14 +14,15 @@
         "./dist/start-manager.js"
     ],
     "scripts": {
-        "postinstall": "patch-package",
+        "postinstall": "patch-package && node scripts/setup-ytdlp.mjs",
+        "setup:ytdlp": "node scripts/setup-ytdlp.mjs",
         "lint": "eslint . --cache --ext .js,.jsx,.ts,.tsx",
         "lint:fix": "eslint . --fix --cache --ext .js,.jsx,.ts,.tsx",
         "format": "prettier --check .",
         "format:fix": "prettier --write .",
         "clean": "git clean -xdf --exclude=\"/config/**/*\"",
         "clean:dry": "git clean -xdf --exclude=\"/config/**/*\" --dry-run",
-        "build": "tsc --project tsconfig.json",
+        "build": "tsc --project tsconfig.json && node scripts/copy-assets.mjs",
         "commands:view": "npm run build && node --enable-source-maps dist/start-bot.js commands view",
         "commands:register": "npm run build && node --enable-source-maps dist/start-bot.js commands register",
         "commands:rename": "npm run build && node --enable-source-maps dist/start-bot.js commands rename",
