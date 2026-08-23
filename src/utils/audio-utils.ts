@@ -181,6 +181,12 @@ export const getYoutubeAudio = async (url: string): Promise<internal.Readable> =
     const args = [
         '-f',
         'bestaudio/best', // best audio-only stream; FFmpeg transcodes to Opus downstream
+        // YouTube's player requires JavaScript execution to decipher stream URLs.
+        // yt-dlp only enables Deno by default; point it at the Node binary already
+        // running this bot so extraction never silently degrades (missing formats,
+        // then 403s) on a machine without Deno installed.
+        '--js-runtimes',
+        `node:${process.execPath}`,
         '--no-playlist',
         '--no-part',
         '--no-cache-dir',
